@@ -1,0 +1,3 @@
+rootProject.name = 'EconomyPlus'
+include 'api'
+include 'server'

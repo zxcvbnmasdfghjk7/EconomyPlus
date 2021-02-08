@@ -1,0 +1,10 @@
+currencies:
+  uuid:
+    plural:
+    singular:
+    isDecimal:
+    isExchangable:
+    isDefault:
+    startBalance:
+    symbol:
+    currencyColour:

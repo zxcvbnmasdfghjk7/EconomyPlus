@@ -1,0 +1,10 @@
+useMySQL: false
+mySQL:
+  username:
+  password:
+  port:
+  database:
+  host:
+
+# set to 0 if you do not want this function
+backupPeriod: 0
