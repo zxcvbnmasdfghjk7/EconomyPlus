@@ -1,2 +1,9 @@
-# Multi-Project-Sample
-This is a templete for java multi-projects
+# EconomyPlus
+Multi-Currency Economy Plugin
+
+Dependencies:
+ - Vault
+ 
+Developer Guide:
+ - Dependencies:
+   - Lombok
