@@ -57,6 +57,11 @@ public class CurrencyManager {
     public void createCurrency(String singular, String plural){
         UUID randomID = UUID.randomUUID();
         Currency currency = new Currency(randomID, plural, singular);
+
+        if(currencies.size() == 0){
+            currency.setDefault(true);
+        }
+
         FileConfiguration fileManager = currencyStorage.getManager();
 
         fileManager.set("currencies", randomID.toString());
@@ -117,6 +122,14 @@ public class CurrencyManager {
         currencies.add(currency);
     }
 
+    public void renameCurrencyPlural(String oldCurrencyPlural, String newCurrencyPlural)
+    {
+        Currency currency = getCurrency(oldCurrencyPlural);
 
+        currency.setPlural(newCurrencyPlural);
 
+        for(Account account:this.plugin.getAccountManager().getAccounts()){
+            Map<Currency, Double> balances = account.getBalances();
+        }
+    }
 }

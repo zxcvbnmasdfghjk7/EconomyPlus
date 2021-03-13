@@ -12,4 +12,5 @@ dependencies{
     compile 'mysql:mysql-connector-java:8.0.23'
     compile 'com.github.MilkBowl:VaultAPI:1.7'
     compile project(':api')
+    compile 'com.moandjiezana.toml:toml4j:0.7.2'
 }

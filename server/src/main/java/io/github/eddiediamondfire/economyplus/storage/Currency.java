@@ -55,6 +55,13 @@ public class Currency implements AbstractFile{
                     manager.getString("currencies." + key + ".symbol").charAt(1));
 
             plugin.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Loading currency " + manager.getString("currencies." + key + ".singular"));
+
+            if(key == null){
+                plugin.getServer().getConsoleSender().sendMessage(ChatColor.RED + "No currency is found, creating a default currency");
+
+                currencyManager.createCurrency("Dollar", "Dollars");
+                break;
+            }
         }
 
     }

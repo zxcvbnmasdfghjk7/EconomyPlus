@@ -1,6 +1,7 @@
 package io.github.eddiediamondfire.economyplus;
 
 import io.github.eddiediamondfire.economyplus.account.AccountManager;
+import io.github.eddiediamondfire.economyplus.api.EconomyAPI;
 import io.github.eddiediamondfire.economyplus.commands.CommandManager;
 import io.github.eddiediamondfire.economyplus.core.EconomyCore;
 import io.github.eddiediamondfire.economyplus.currency.CurrencyManager;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class Main extends JavaPlugin {
+public class Main extends JavaPlugin implements EconomyAPI {
     private final List<Dependency> dependencies;
     private final List<AbstractFile> files;
     private final EconomyCore economyCore;
@@ -55,6 +56,7 @@ public class Main extends JavaPlugin {
         getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Loaded Dependencies");
 
         loadFiles();
+
         getServer().getPluginManager().registerEvents(new EconomyListener(this), this);
     }
 

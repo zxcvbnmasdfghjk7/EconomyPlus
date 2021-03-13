@@ -304,11 +304,15 @@ public class EconomyCore implements Economy {
 
     @Override
     public boolean createPlayerAccount(String playerName) {
+        Player player = Bukkit.getPlayer(playerName);
+
+        // TODO
         return false;
     }
 
     @Override
     public boolean createPlayerAccount(OfflinePlayer player) {
+        // TODO
         return false;
     }
 

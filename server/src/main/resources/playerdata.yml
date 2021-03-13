@@ -1,6 +1,6 @@
 accounts:
   <uuid>:
     username:
-      currency:
-        <currencyName>:
-          balance:
+    currency:
+      <currencyName>:
+        balance:

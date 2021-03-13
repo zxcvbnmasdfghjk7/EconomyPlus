@@ -2,11 +2,9 @@ package io.github.eddiediamondfire.economyplus.account;
 
 import io.github.eddiediamondfire.economyplus.Main;
 import io.github.eddiediamondfire.economyplus.currency.Currency;
-import io.github.eddiediamondfire.economyplus.currency.CurrencyManager;
 import io.github.eddiediamondfire.economyplus.storage.AbstractFile;
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -14,7 +12,7 @@ import java.util.*;
 
 @Getter
 public class AccountManager {
-    private List<Account> accounts;
+    private final List<Account> accounts;
     private final Main plugin;
     private AbstractFile accountsStorage = null;
     public AccountManager(Main plugin){
@@ -57,60 +55,28 @@ public class AccountManager {
         return accountExistAccountsStorage(playerUUID);
     }
 
-    public boolean accountExistAccountsStorage(UUID playerUUID){
+    private boolean accountExistAccountsStorage(UUID playerUUID){
         accountsStorage = plugin.getAccountsStorage();
-        return UUID.fromString(Objects.requireNonNull(accountsStorage.getManager().getString("accounts"))) != playerUUID;
+        return UUID.fromString(Objects.requireNonNull(accountsStorage.getManager().getString("accounts"))) == playerUUID;
     }
 
-    // remove account when player leaves the game
-    public void removeAccount(UUID playerUUID){
-        FileConfiguration manager = plugin.getAccountsStorage().getManager();
-
-        Player entity = Bukkit.getPlayer(playerUUID);
-        if(accountExist(playerUUID)){
-            Account player = this.getAccount(playerUUID);
-            manager.set("accounts", playerUUID);
-            manager.set("accounts." + playerUUID, entity.getDisplayName());
-
-            for(Currency currency: plugin.getCurrencyManager().getCurrencies()){
-                double amount = player.getAmount(currency);
-
-                manager.set("accounts." + playerUUID + "." + entity.getDisplayName() + ".currency", currency.getSingular());
-                manager.set("accounts." + playerUUID + "." + entity.getDisplayName() + ".currency." + currency.getSingular(), amount);
-            }
-
-            this.accounts.remove(player);
-        }
-
-    }
-
-    // Add account when the player joins the server.
-    public void addAccount(UUID playerUUID){
+    public void saveAccount(UUID playerUUID){
         FileConfiguration config = plugin.getAccountsStorage().getManager();
 
-        if(!accountExist(playerUUID)){
-            Account account = new Account(playerUUID, config.getString("accounts." + playerUUID));
-            Map<Currency, Double> balances = account.getBalances();
+        Player player = Bukkit.getPlayer(playerUUID);
+        if(accountExist(playerUUID)){
+            Account playerAccount = this.getAccount(playerUUID);
 
-            Player player = Bukkit.getPlayer(playerUUID);
-            ConfigurationSection section = config.getConfigurationSection("accounts." + playerUUID + "." +
-                    player.getDisplayName() + ".currency");
-            for(String key: section.getKeys(false)){
-                CurrencyManager currencyManager = plugin.getCurrencyManager();
+            config.set("accounts", playerUUID);
 
-                Currency currency = currencyManager.getCurrency(key);
-                double amount = config.getDouble("accounts."
-                        + playerUUID + "." +
-                        player.getDisplayName()
-                        + ".currency." +
-                        key + "" +
-                        ".balance");
+            config.set("accounts." + playerUUID, player.getDisplayName());
 
+            for(Currency currency: plugin.getCurrencyManager().getCurrencies()){
+                double amount =playerAccount.getAmount(currency);
 
-                balances.put(currency, amount);
+                config.set("accounts." + playerUUID + "." + player.getDisplayName() + ".currency", currency.getSingular());
+                config.set("accounts." + playerUUID + "." + player.getDisplayName() + ".currency." + currency.getSingular(), amount);
             }
-
-            accounts.add(account);
         }
     }
 }

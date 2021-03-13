@@ -1,6 +1,7 @@
 buildscript{
     ext{
         LOMBOK_VERSION = '5.3.0'
+        SHADOWJAR_VERSION = '6.1.0'
     }
     repositories {
         maven{
@@ -10,12 +11,15 @@ buildscript{
 
     dependencies{
         classpath "io.freefair.gradle:lombok-plugin:${LOMBOK_VERSION}"
+        classpath "com.github.jengelman.gradle.plugins:shadow:${SHADOWJAR_VERSION}"
     }
 }
 
 subprojects{
     apply plugin: 'java'
     apply plugin: 'io.freefair.lombok'
+    apply plugin: 'idea'
+    apply plugin: 'com.github.johnrengelman.shadow'
 
     repositories{
         mavenCentral()
