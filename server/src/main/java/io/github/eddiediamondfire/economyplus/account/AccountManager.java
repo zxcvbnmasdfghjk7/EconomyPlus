@@ -2,14 +2,10 @@ package io.github.eddiediamondfire.economyplus.account;
 
 import io.github.eddiediamondfire.economyplus.Main;
 import io.github.eddiediamondfire.economyplus.currency.Currency;
-import io.github.eddiediamondfire.economyplus.currency.CurrencyManager;
-import io.github.eddiediamondfire.economyplus.data.Data;
 import io.github.eddiediamondfire.economyplus.utils.MessageManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.sql.Connection;

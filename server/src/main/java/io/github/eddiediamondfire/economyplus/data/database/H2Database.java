@@ -1,15 +1,11 @@
 package io.github.eddiediamondfire.economyplus.data.database;
 
 import io.github.eddiediamondfire.economyplus.Main;
-import io.github.eddiediamondfire.economyplus.account.Account;
-import io.github.eddiediamondfire.economyplus.currency.Currency;
 import io.github.eddiediamondfire.economyplus.data.Data;
 import io.github.eddiediamondfire.economyplus.utils.MessageManager;
 import org.bukkit.ChatColor;
 
 import java.sql.*;
-import java.util.List;
-import java.util.UUID;
 
 public class H2Database implements Data {
     private Connection connection = null;
