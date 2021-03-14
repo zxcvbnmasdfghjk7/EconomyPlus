@@ -27,6 +27,8 @@ This repository is under development by EddieDiamondFire (Also known as ScxLore1
 The dependencies will be required is:
 * Lombok
 * Slf4j
+
+Note: This project is made with Kotlin and Java. Be aware.
 ### Setup Guide
 
 To install this plugin, you will need:
