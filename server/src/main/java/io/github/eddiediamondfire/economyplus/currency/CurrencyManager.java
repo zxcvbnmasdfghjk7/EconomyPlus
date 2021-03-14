@@ -2,7 +2,6 @@ package io.github.eddiediamondfire.economyplus.currency;
 
 import io.github.eddiediamondfire.economyplus.Main;
 import io.github.eddiediamondfire.economyplus.account.Account;
-import io.github.eddiediamondfire.economyplus.storage.AbstractFile;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -12,13 +11,11 @@ import java.util.*;
 @Getter
 public class CurrencyManager {
     private final Main plugin;
-    private final AbstractFile currencyStorage;
     private final List<Currency> currencies;
 
     public CurrencyManager(Main plugin){
         this.plugin = plugin;
         this.currencies = new ArrayList<>();
-        this.currencyStorage = plugin.getCurrencyStorage();
     }
 
     // currencyName can be a plural or a singular
@@ -54,20 +51,10 @@ public class CurrencyManager {
         return null;
     }
 
+    // TODO rewrite how to store data
     public void createCurrency(String singular, String plural){
         UUID randomID = UUID.randomUUID();
         Currency currency = new Currency(randomID, plural, singular);
-        FileConfiguration fileManager = currencyStorage.getManager();
-
-        fileManager.set("currencies", randomID.toString());
-        fileManager.set("currencies." + randomID.toString(), currency.getPlural());
-        fileManager.set("currencies." + randomID.toString(), currency.getSingular());
-        fileManager.set("currencies." + randomID.toString(), currency.isDecimal());
-        fileManager.set("currencies." + randomID.toString(), currency.isExchangeAble());
-        fileManager.set("currencies." + randomID.toString(), currency.isDefault());
-        fileManager.set("currencies." + randomID.toString(), currency.getStartBalance());
-        fileManager.set("currencies." + randomID.toString(), currency.getSymbol());
-        fileManager.set("currencies." + randomID.toString(), currency.getCurrencyColour());
 
         currencies.add(currency);
 
@@ -77,12 +64,11 @@ public class CurrencyManager {
         }
     }
 
+    // TODO Rewrite how data is handled
     public void removeCurrency(String currencyName){
         Currency cu = getCurrency(currencyName);
 
         if(!(currencies.size() == 1)){
-            FileConfiguration config = plugin.getCurrencyStorage().getManager();
-            config.set("currencies." + cu.getId().toString(), null);
 
             List<Account> accounts = plugin.getAccountManager().getAccounts();
 

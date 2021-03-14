@@ -14,6 +14,7 @@ public class Account {
 
     private UUID playerUUID;
     private String username;
+    private UUID accountID;
     private Map<Currency, Double> balances;
 
     public Account(UUID playerUUID, String username){

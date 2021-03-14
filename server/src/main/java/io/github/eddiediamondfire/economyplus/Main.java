@@ -4,74 +4,78 @@ import io.github.eddiediamondfire.economyplus.account.AccountManager;
 import io.github.eddiediamondfire.economyplus.commands.CommandManager;
 import io.github.eddiediamondfire.economyplus.core.EconomyCore;
 import io.github.eddiediamondfire.economyplus.currency.CurrencyManager;
-import io.github.eddiediamondfire.economyplus.dependencies.Dependency;
-import io.github.eddiediamondfire.economyplus.dependencies.VaultAPIHook;
+import io.github.eddiediamondfire.economyplus.data.Data;
+import io.github.eddiediamondfire.economyplus.data.database.H2Database;
+import io.github.eddiediamondfire.economyplus.data.TomlManager;
 import io.github.eddiediamondfire.economyplus.listener.EconomyListener;
-import io.github.eddiediamondfire.economyplus.storage.AbstractFile;
-import io.github.eddiediamondfire.economyplus.storage.Accounts;
-import io.github.eddiediamondfire.economyplus.storage.Configuration;
-import io.github.eddiediamondfire.economyplus.storage.Currency;
+import io.github.eddiediamondfire.economyplus.utils.MessageManager;
 import lombok.Getter;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 public class Main extends JavaPlugin {
-    private final List<Dependency> dependencies;
-    private final List<AbstractFile> files;
-    private final EconomyCore economyCore;
+    private EconomyCore economyCore;
     private final AccountManager accountManager;
     private final CurrencyManager currencyManager;
     private final CommandManager commandManager;
-    private final AbstractFile accountsStorage;
-    private final AbstractFile currencyStorage;
+    private final MessageManager messageManager;
     private static Main plugin;
-    private int backupPeriod;
-    private boolean useBackup;
+    private final TomlManager tomlManager;
+    private Data database = null;
 
     public Main(){
-        dependencies = new ArrayList<>();
         economyCore = new EconomyCore(this);
-        dependencies.add(new VaultAPIHook(this));
         accountManager = new AccountManager(this);
         currencyManager = new CurrencyManager(this);
         commandManager = new CommandManager(this);
-        accountsStorage = new Accounts(this);
-        currencyStorage = new Currency(this);
-        files = new ArrayList<>();
-        files.add(accountsStorage);
-        files.add(new Configuration(this));
-        files.add(currencyStorage);
+        tomlManager = new TomlManager(this);
+        messageManager = new MessageManager(this);
     }
 
     @Override
     public void onEnable() {
-        for (Dependency api : dependencies) {
-            api.onLoad();
-        }
-        getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Loaded Dependencies");
 
-        loadFiles();
-        getServer().getPluginManager().registerEvents(new EconomyListener(this), this);
+        // Database loading algorithm
+        MessageManager.sendMessage(ChatColor.YELLOW, "Loading Database initialisation");
+        database = new H2Database(this);
+        database.initaliseDatabase();
+        MessageManager.sendMessage(ChatColor.GREEN, "Database initialisation complete!");
+
+        // Vault Dependency Hook algorithm
+        MessageManager.sendMessage(ChatColor.YELLOW, "Loading Vault Dependency Integration");
+        if(!loadVaultEconomy()){
+            MessageManager.sendMessage(ChatColor.RED, "Vault is not found, disabling plugin");
+            getServer().getPluginManager().disablePlugin(this);
+        }
+        MessageManager.sendMessage(ChatColor.GREEN, "Loaded Vault Dependency Integration");
+
+        // Register EconomyListener
+        this.getServer().getPluginManager().registerEvents(new EconomyListener(this), this);
     }
 
-    private void loadFiles(){
-        for(AbstractFile file:files){
-            file.loadFiles();
-
-            getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Loading " + file.getFileName());
+    private boolean loadVaultEconomy(){
+        if(getServer().getPluginManager().getPlugin("Vault") == null)
+        {
+            return false;
         }
+
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+
+        if(rsp == null)
+        {
+            return false;
+        }
+
+        economyCore = (EconomyCore) rsp.getProvider();
+
+        return true;
+
     }
 
     public static Main getPlugin(){
         return plugin;
-    }
-
-    public void setBackupPeriod(int period, boolean useBackup){
-        this.backupPeriod = period;
-        this.useBackup = useBackup;
     }
 }
