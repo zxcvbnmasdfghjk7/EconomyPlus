@@ -6,25 +6,27 @@ import io.github.eddiediamondfire.economyplus.commands.CommandManager;
 import io.github.eddiediamondfire.economyplus.core.EconomyCore;
 import io.github.eddiediamondfire.economyplus.currency.CurrencyManager;
 import io.github.eddiediamondfire.economyplus.data.Data;
-import io.github.eddiediamondfire.economyplus.data.database.H2Database;
 import io.github.eddiediamondfire.economyplus.data.TomlManager;
+import io.github.eddiediamondfire.economyplus.data.database.H2Database;
+import io.github.eddiediamondfire.economyplus.dependency.EPVaultHook;
 import io.github.eddiediamondfire.economyplus.listener.EconomyListener;
 import io.github.eddiediamondfire.economyplus.utils.MessageManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-@Getter
 public class Main extends JavaPlugin {
-    private EconomyCore economyCore;
+    private final EconomyCore economyCore;
     private final AccountManager accountManager;
     private final CurrencyManager currencyManager;
     private final CommandManager commandManager;
-    private final MessageManager messageManager;
+    private MessageManager messageManager = null;
     private static Main plugin;
     private final TomlManager tomlManager;
     private Data database = null;
+    private boolean debugMode;
+    private Toml configurationFile = null;
+    private final EPVaultHook vaultHook;
 
     public Main(){
         economyCore = new EconomyCore(this);
@@ -32,11 +34,24 @@ public class Main extends JavaPlugin {
         currencyManager = new CurrencyManager(this);
         commandManager = new CommandManager(this);
         tomlManager = new TomlManager(this);
-        messageManager = new MessageManager(this);
+        vaultHook = new EPVaultHook(this);
     }
 
     @Override
     public void onEnable() {
+        debugMode = false;
+
+        // TODO implement config option
+        configurationFile = tomlManager.loadTomlFile("config.toml");
+        MessageManager.sendMessage(ChatColor.YELLOW, "Loading configuration files");
+
+        if(tomlManager.isDebugEnabled())
+        {
+            MessageManager.sendMessage(ChatColor.YELLOW, "Debug Message mode enabled!");
+            messageManager = new MessageManager(this, true);
+        }
+
+        messageManager = new MessageManager(this, false);
 
         // Database loading algorithm
         MessageManager.sendMessage(ChatColor.YELLOW, "Loading Database initialisation");
@@ -44,36 +59,22 @@ public class Main extends JavaPlugin {
         database.initaliseDatabase();
         MessageManager.sendMessage(ChatColor.GREEN, "Database initialisation complete!");
 
-        // Vault Dependency Hook algorithm
-        MessageManager.sendMessage(ChatColor.YELLOW, "Loading Vault Dependency Integration");
-        if(!loadVaultEconomy()){
-            MessageManager.sendMessage(ChatColor.RED, "Vault is not found, disabling plugin");
-            getServer().getPluginManager().disablePlugin(this);
-        }
-        MessageManager.sendMessage(ChatColor.GREEN, "Loaded Vault Dependency Integration");
-
         // Register EconomyListener
         this.getServer().getPluginManager().registerEvents(new EconomyListener(this), this);
+
+        // Vault Dependency Hook algorithm
+        MessageManager.sendMessage(ChatColor.YELLOW, "Loading Vault Dependency Integration");
+        vaultHook.hookVault();
     }
 
-    private boolean loadVaultEconomy(){
-        if(getServer().getPluginManager().getPlugin("Vault") == null)
-        {
-            return false;
-        }
+    @Override
+    public void onDisable() {
 
-        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-
-        if(rsp == null)
-        {
-            return false;
-        }
-
-        economyCore = (EconomyCore) rsp.getProvider();
-
-        return true;
-
+        // Vault Dependency Hook algorithm
+        MessageManager.sendMessage(ChatColor.GREEN, "Unhooking Vault Dependency Integration");
+        vaultHook.unhookVault();
     }
+
 
     public static Main getPlugin(){
         return plugin;

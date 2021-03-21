@@ -4,6 +4,7 @@ import io.github.eddiediamondfire.economyplus.Main;
 import io.github.eddiediamondfire.economyplus.data.Data;
 import io.github.eddiediamondfire.economyplus.utils.MessageManager;
 import org.bukkit.ChatColor;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 
@@ -15,15 +16,17 @@ public class H2Database implements Data {
     public H2Database(Main plugin)
     {
         this.plugin = plugin;
-        connectionUrl = "jdbc:h2:" + plugin.getDataFolder().getAbsolutePath() + "/data/database";
+        connectionUrl = "jdbc:h2:" + plugin.getDataFolder().getAbsolutePath() + "/data/database.db";
     }
 
     @Override
     public void initaliseDatabase(){
+
+
         try{
             connection = this.getConnection();
             MessageManager.sendMessage(ChatColor.YELLOW, "Looking for Currency Table");
-            if(!tableExist("Currency"))
+            if(!tableExist("CURRENCIES"))
             {
                 MessageManager.sendMessage(ChatColor.RED, "Currency Table does not exist, creating one.");
                 statement = connection.prepareStatement("CREATE TABLE Currencies (" +
@@ -40,9 +43,8 @@ public class H2Database implements Data {
                         ");");
 
                 statement.execute();
-
             }
-            if(!tableExist("Accounts"))
+            if(!tableExist("ACCOUNTS"))
             {
                 statement = connection.prepareStatement("CREATE TABLE Accounts (" +
                         "UUID varchar(255)," +
@@ -52,7 +54,7 @@ public class H2Database implements Data {
                 statement.execute();
             }
 
-            if(!tableExist("Balance"))
+            if(!tableExist("BALANCES"))
             {
                 statement = connection.prepareStatement("CREATE TABLE Balances (" +
                         "UUID varchar(255)," +
@@ -77,7 +79,7 @@ public class H2Database implements Data {
     }
 
     @Override
-    public boolean tableExist(String tableName)
+    public boolean tableExist(@NotNull String tableName)
     {
         try
         {
@@ -93,12 +95,14 @@ public class H2Database implements Data {
         return false;
     }
 
+    @NotNull
     @Override
     public Connection getConnection(){
         try
         {
+            Class.forName("org.h2.Driver");
             connection = DriverManager.getConnection(connectionUrl);
-        }catch (SQLException e)
+        }catch (SQLException | ClassNotFoundException e)
         {
             MessageManager.sendMessage(ChatColor.RED, "An error occured while connecting to a database!");
             e.printStackTrace();

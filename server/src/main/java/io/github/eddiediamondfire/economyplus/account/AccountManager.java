@@ -17,6 +17,7 @@ public class AccountManager {
     private final List<Account> accounts;
     private final Main plugin;
     private Connection connection = null;
+    private PreparedStatement statement = null;
     public AccountManager(Main plugin){
         this.plugin = plugin;
         accounts = new ArrayList<>();
@@ -68,11 +69,6 @@ public class AccountManager {
         }
     }
 
-    // TODO WIP
-    public void deleteAccount(UUID playerUUID){
-
-    }
-
     public boolean accountExist(UUID playerUUID){
         for(Account account:accounts){
             if(account.getPlayerUUID().equals(playerUUID)){
@@ -84,14 +80,13 @@ public class AccountManager {
         return accountExistDatabase(playerUUID);
     }
 
-    // TODO Rewite how data is handled
     public boolean accountExistDatabase(UUID playerUUID)
     {
         try
         {
             connection = plugin.getDatabase().getConnection();
 
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM Accounts WHERE UUID=?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM ACCOUNTS WHERE UUID=?");
             statement.setString(1, playerUUID.toString());
             statement.execute();
 
@@ -108,12 +103,27 @@ public class AccountManager {
     // TODO Rewrite how data is handled
     // remove account when player leaves the game
     public void removeAccount(UUID playerUUID){
+        try
+        {
+            Player entity = Bukkit.getPlayer(playerUUID);
+            connection = plugin.getDatabase().getConnection();
+            List<Currency> currencies = plugin.getCurrencyManager().getCurrencies();
+            Account account = getAccount(playerUUID);
+            Map<Currency, Double> balance = account.getBalances();
 
-        Player entity = Bukkit.getPlayer(playerUUID);
-        if(accountExist(playerUUID)){
+            if(accountExist(playerUUID)){
+                statement = connection.prepareStatement("SELECT * FROM BALANCES WHERE UUID=?");
+                statement.setString(1, entity.getUniqueId().toString());
 
+                ResultSet results = statement.executeQuery();
+                results.next();
+
+                
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
         }
-
     }
 
     // TODO Rewrite how data is handled

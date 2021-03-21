@@ -31,7 +31,38 @@ public class Account {
         balances.put(currency, newBalance);
     }
 
+    public Map<Currency, Double> getBalances(){
+        return balances;
+    }
     public double getAmount(Currency currency){
         return balances.get(currency);
+    }
+
+    public UUID getPlayerUUID() {
+        return playerUUID;
+    }
+
+    public void setPlayerUUID(UUID playerUUID) {
+        this.playerUUID = playerUUID;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public UUID getAccountID() {
+        return accountID;
+    }
+
+    public void setAccountID(UUID accountID) {
+        this.accountID = accountID;
+    }
+
+    public void setBalances(Map<Currency, Double> balances) {
+        this.balances = balances;
     }
 }
