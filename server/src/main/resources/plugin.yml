@@ -1,8 +1,9 @@
 name: EconomyPlus
 main: io.github.eddiediamondfire.economyplus.Main
-version: 0.1-SNAPSHOT
+version: dev-SNAPSHOT
 api-version: 1.16
-description: Economy Plugin for Vault
+description: Multi-Currency Economy Plugin for Vault
 author: EddieDiamondFire
 depend: [Vault]
+loadbefore: [Vault]
 prefix: EconomyPlus
