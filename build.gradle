@@ -1,6 +1,5 @@
 buildscript{
     ext{
-        LOMBOK_VERSION = '5.3.0'
         KOTLIN_VERSION = '1.5.0-M1'
         SHADOWJAR_VERSION = '6.1.0'
     }
@@ -11,7 +10,6 @@ buildscript{
     }
 
     dependencies{
-        classpath "io.freefair.gradle:lombok-plugin:${LOMBOK_VERSION}"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${KOTLIN_VERSION}"
         classpath "com.github.jengelman.gradle.plugins:shadow:${SHADOWJAR_VERSION}"
     }
@@ -19,7 +17,6 @@ buildscript{
 
 subprojects{
     apply plugin: 'java'
-    apply plugin: 'io.freefair.lombok'
     apply plugin: 'org.jetbrains.kotlin.jvm'
     apply plugin: 'com.github.johnrengelman.shadow'
 

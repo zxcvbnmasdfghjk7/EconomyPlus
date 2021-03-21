@@ -1,15 +1,11 @@
 package io.github.eddiediamondfire.economyplus.account;
 
 import io.github.eddiediamondfire.economyplus.currency.Currency;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Getter
-@Setter
 public class Account {
 
     private UUID playerUUID;

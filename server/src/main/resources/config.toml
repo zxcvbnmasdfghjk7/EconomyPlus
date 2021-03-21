@@ -1,0 +1,16 @@
+[general]
+backupPeriod = 0
+
+[developer]
+debug_mode = false
+
+[database]
+# database-type can be h2, mysql
+database-type = "h2"
+
+    [database.mysql]
+    username = ""
+    password = ""
+    port = 3306
+    host = ""
+

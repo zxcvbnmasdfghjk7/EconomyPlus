@@ -3,7 +3,6 @@ package io.github.eddiediamondfire.economyplus.account;
 import io.github.eddiediamondfire.economyplus.Main;
 import io.github.eddiediamondfire.economyplus.currency.Currency;
 import io.github.eddiediamondfire.economyplus.utils.MessageManager;
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -14,9 +13,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-@Getter
 public class AccountManager {
-    private List<Account> accounts;
+    private final List<Account> accounts;
     private final Main plugin;
     private Connection connection = null;
     public AccountManager(Main plugin){
@@ -123,5 +121,9 @@ public class AccountManager {
     public void addAccount(UUID playerUUID){
         if(!accountExist(playerUUID)){
         }
+    }
+
+    public List<Account> getAccounts(){
+        return accounts;
     }
 }

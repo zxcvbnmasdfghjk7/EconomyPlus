@@ -2,13 +2,10 @@ package io.github.eddiediamondfire.economyplus.currency;
 
 import io.github.eddiediamondfire.economyplus.Main;
 import io.github.eddiediamondfire.economyplus.account.Account;
-import lombok.Getter;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.*;
 
-@Getter
 public class CurrencyManager {
     private final Main plugin;
     private final List<Currency> currencies;
@@ -103,6 +100,7 @@ public class CurrencyManager {
         currencies.add(currency);
     }
 
-
-
+    public List<Currency> getCurrencies() {
+        return currencies;
+    }
 }

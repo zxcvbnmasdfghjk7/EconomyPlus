@@ -1,5 +1,6 @@
 package io.github.eddiediamondfire.economyplus;
 
+import com.moandjiezana.toml.Toml;
 import io.github.eddiediamondfire.economyplus.account.AccountManager;
 import io.github.eddiediamondfire.economyplus.commands.CommandManager;
 import io.github.eddiediamondfire.economyplus.core.EconomyCore;
@@ -9,7 +10,6 @@ import io.github.eddiediamondfire.economyplus.data.database.H2Database;
 import io.github.eddiediamondfire.economyplus.data.TomlManager;
 import io.github.eddiediamondfire.economyplus.listener.EconomyListener;
 import io.github.eddiediamondfire.economyplus.utils.MessageManager;
-import lombok.Getter;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -77,5 +77,37 @@ public class Main extends JavaPlugin {
 
     public static Main getPlugin(){
         return plugin;
+    }
+
+    public AccountManager getAccountManager() {
+        return accountManager;
+    }
+
+    public EconomyCore getEconomyCore() {
+        return economyCore;
+    }
+
+    public CurrencyManager getCurrencyManager() {
+        return currencyManager;
+    }
+
+    public CommandManager getCommandManager() {
+        return commandManager;
+    }
+
+    public MessageManager getMessageManager() {
+        return messageManager;
+    }
+
+    public Data getDatabase(){
+        return database;
+    }
+
+    public boolean isDebugMode() {
+        return debugMode;
+    }
+
+    public Toml getConfigurationFile() {
+        return configurationFile;
     }
 }
