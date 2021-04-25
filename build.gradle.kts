@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 buildscript {
     val shadowJar_Version by rootProject.extra{
         "6.1.0"
@@ -36,5 +38,10 @@ subprojects{
     dependencies{
         implementation("org.slf4j:slf4j-api:${rootProject.extra.get("slf4j_Version")}")
         implementation("org.slf4j:slf4j-log4j12:${rootProject.extra.get("slf4j_Version")}")
+    }
+
+    tasks.named<ShadowJar>("shadowJar"){
+        archiveBaseName.set("EconomyPlus")
+        archiveVersion.set("dev-SNAPSHOT")
     }
 }
