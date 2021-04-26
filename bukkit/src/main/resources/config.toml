@@ -1,0 +1,7 @@
+[General]
+
+[Economy]
+    [Economy.settings]
+        symbol = "$"
+        plural = "Dollars"
+        singular = "Dollar"
