@@ -1,28 +1,9 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
-buildscript {
-    val shadowJarVersion by rootProject.extra{
-        "6.1.0"
-    }
-
-    val slf4jVersion by rootProject.extra{
-        "1.7.30"
-    }
-    val kotlinVersion by rootProject.extra {
-        "1.4.31"
-    }
-
-    repositories{
-        mavenCentral()
-        maven{
-            url = uri("https://plugins.gradle.org/m2/")
-        }
-    }
-
-    dependencies{
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${rootProject.extra.get("kotlinVersion")}")
-        classpath("com.github.jengelman.gradle.plugins:shadow:${rootProject.extra.get("shadowJarVersion")}")
-    }
+plugins{
+    java
+    id("com.github.johnrengelman.shadow")
+    id("net.minecrell.plugin-yml.bukkit") apply false
+    kotlin("jvm") apply false
+    idea
 }
 
 allprojects{
@@ -31,25 +12,26 @@ allprojects{
 }
 
 subprojects{
+    apply(plugin="java")
+
     repositories{
         mavenCentral()
+        flatDir {
+            dirs("libraries")
+        }
     }
 
-    apply(plugin = "java")
-    apply(plugin = "org.jetbrains.kotlin.jvm")
-    apply(plugin = "idea")
-    apply(plugin = "kotlin-kapt")
-    apply(plugin = "com.github.johnrengelman.shadow")
-
-    val implementation by configurations
+    val kotlinVersion = project.properties["kotlinVersion"]
     dependencies{
-        implementation("org.slf4j:slf4j-api:${rootProject.extra.get("slf4jVersion")}")
-        implementation("org.slf4j:slf4j-log4j12:${rootProject.extra.get("slf4jVersion")}")
-        implementation("org.jetbrains.kotlin:kotlin-stdlib:${rootProject.extra.get("kotlinVersion")}")
+        implementation("org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}")
     }
+}
 
-    tasks.named<ShadowJar>("shadowJar"){
-        archiveBaseName.set("EconomyPlus")
-        archiveVersion.set("dev-SNAPSHOT")
+val projectName: String = rootProject.name
+val projectVersion: String = project.version as String
+tasks{
+    named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar"){
+        archiveBaseName.set(projectName)
+        archiveVersion.set(projectVersion)
     }
 }
