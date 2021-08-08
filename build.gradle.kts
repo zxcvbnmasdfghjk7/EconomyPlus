@@ -1,7 +1,6 @@
 plugins{
     java
     id("com.github.johnrengelman.shadow")
-    id("net.minecrell.plugin-yml.bukkit") apply false
     kotlin("jvm") apply false
     idea
 }
@@ -9,10 +8,6 @@ plugins{
 allprojects{
     group = "io.github.eddiediamondfire"
     version = "dev-SNAPSHOT"
-}
-
-subprojects{
-    apply(plugin="java")
 
     repositories{
         mavenCentral()
@@ -20,15 +15,29 @@ subprojects{
             dirs("libraries")
         }
     }
+}
 
-    val kotlinVersion = project.properties["kotlinVersion"]
-    dependencies{
-        implementation("org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}")
+subprojects{
+    apply(plugin="java")
+}
+
+apply(plugin="java")
+val kotlinVersion = project.properties["kotlinVersion"]
+dependencies{
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}")
+    implementation(project(":bukkit"))
+    implementation(project(":api"))
+}
+
+java{
+    toolchain{
+        languageVersion.set(JavaLanguageVersion.of(16))
     }
 }
 
 val projectName: String = rootProject.name
 val projectVersion: String = project.version as String
+
 tasks{
     named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar"){
         archiveBaseName.set(projectName)

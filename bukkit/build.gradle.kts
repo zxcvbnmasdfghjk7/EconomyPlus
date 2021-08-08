@@ -3,17 +3,14 @@ plugins{
     id("net.minecrell.plugin-yml.bukkit")
 }
 repositories{
-    maven{
-        url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots")
-    }
-    maven{
-        url = uri("https://jitpack.io")
-    }
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots")
+    maven("https://jitpack.io")
+    maven("https://oss.sonatype.org/content/repositories/snapshots")
+    maven("https://oss.sonatype.org/content/repositories/central")
 }
 dependencies{
-    implementation("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
-    implementation("com.github.MilkBowl:VaultAPI:1.7")
-    implementation("com.moandjiezana.toml:toml4j:0.7.1")
+    compileOnly("org.spigotmc:spigot-api:1.17-R0.1-SNAPSHOT")
+    compileOnly("com.github.MilkBowl:VaultAPI:1.7")
     implementation("com.h2database:h2:1.4.200")
 
     val slf4jVersion: String = project.properties["slf4jVersion"] as String
@@ -23,6 +20,9 @@ dependencies{
 
 bukkit{
     main = "io.github.eddiediamondfire.economyplus.EconomyPlus"
-
-    apiVersion = "1.16"
+    apiVersion = "1.17"
+    authors = listOf("EddieDiamondFire (ScxLore1216)")
+    depend = listOf("Vault")
+    defaultPermission = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+    load = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.PluginLoadOrder.STARTUP
 }

@@ -1,18 +1,20 @@
-package io.github.eddiediamondfire.economyplus.account;
+package io.github.eddiediamondfire.economyplus.player;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-public class PlayerAccount {
-
+public class Player {
     private UUID playerUUID;
     private String userName;
-    private double bankAmount;
+    private Map<String, Double> bank;
 
-    public PlayerAccount(UUID playerUUID, String userName, double amount){
+    public Player(UUID playerUUID, String userName){
         setPlayerUUID(playerUUID);
         setUserName(userName);
-        setBankAmount(amount);
+        setBank(new HashMap<>());
     }
+
     public UUID getPlayerUUID() {
         return playerUUID;
     }
@@ -29,11 +31,11 @@ public class PlayerAccount {
         this.userName = userName;
     }
 
-    public double getBankAmount() {
-        return bankAmount;
+    public Map<String, Double> getBank() {
+        return bank;
     }
 
-    public void setBankAmount(double bankAmount) {
-        this.bankAmount = bankAmount;
+    public void setBank(Map<String, Double> bank) {
+        this.bank = bank;
     }
 }
