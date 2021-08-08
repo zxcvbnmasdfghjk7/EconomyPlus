@@ -1,6 +1,6 @@
 # EconomyPlus
 
-EconomyPlus is a Economy Plugin that has multi-currency support.
+A simple vault economy plugin.
 
 **This repository is WIP**
 

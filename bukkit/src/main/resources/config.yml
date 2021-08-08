@@ -1,0 +1,10 @@
+global_economy:
+  currency_name: Dollar
+  currency_plural: Dollars
+  currency_singular: Dollar
+  currency_symbol: $
+  default_starting_amount: 100
+
+storage_settings:
+  # Options are h2, mysql
+  storage_method: h2
