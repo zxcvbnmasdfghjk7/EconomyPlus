@@ -15,4 +15,6 @@ public interface StorageMethod {
 
     void createAccount(UUID playerUUID, String userName, double amount);
 
+    UUID getPlayerAccountUUID(String username);
+
 }

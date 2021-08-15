@@ -5,7 +5,6 @@ import io.github.eddiediamondfire.economyplus.storage.Storage;
 import io.github.eddiediamondfire.economyplus.storage.StorageMethod;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
 import java.sql.*;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -23,8 +22,9 @@ public class H2Database implements Storage, StorageMethod {
         Connection connection = null;
 
         try{
+            Class.forName("org.h2.Driver");
             connection = DriverManager.getConnection(EconomyPlus.connectionUrl);
-        }catch (SQLException ex){
+        }catch (SQLException | ClassNotFoundException ex){
             plugin.getLogger().log(Level.WARNING, "An error occured while attempting to establish connection to the database", ex);
         }
         plugin.getLogger().info("Connection established successfully");
@@ -37,8 +37,10 @@ public class H2Database implements Storage, StorageMethod {
         PreparedStatement statement;
 
         try{
-            statement = connection.prepareStatement("CREATE TABLE PlayerEconomy('PLAYER_UUID' varchar NOT NULL, 'PLAYER_NAME' varchar, 'BALANCE' double, PRIMARY KEY('PLAYER_UUID')) IF NOT EXISTS");
+            statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS PlayerEconomy(PLAYER_UUID varchar NOT NULL, PLAYER_NAME varchar, BALANCE double, PRIMARY KEY(PLAYER_UUID))");
             statement.execute();
+
+            connection.close();
         }catch (SQLException ex){
             plugin.getLogger().log(Level.WARNING, "An error occured while attempting to establish connection to the database", ex);
         }
@@ -152,5 +154,26 @@ public class H2Database implements Storage, StorageMethod {
         }catch (SQLException ex){
             plugin.getLogger().log(Level.WARNING, "An error occurred while executing a task", ex);
         }
+    }
+
+    @Override
+    public UUID getPlayerAccountUUID(String username) {
+        PreparedStatement statement = null;
+        UUID accountUUID = null;
+        try{
+            statement = plugin.getDatabase().getConnection().prepareStatement("SELECT * FROM PlayerEconomy WHERE PLAYER_NAME=?");
+            statement.setString(1, username);
+            ResultSet results = statement.executeQuery();
+
+            if(!results.next()){
+                throw new SQLException("NO RESULTS!");
+            }
+
+            accountUUID = UUID.fromString(results.getString("PLAYER_UUID"));
+            return accountUUID;
+        }catch (SQLException ex){
+            plugin.getLogger().log(Level.WARNING, "An error occurred while executing a task", ex);
+        }
+        return null;
     }
 }
