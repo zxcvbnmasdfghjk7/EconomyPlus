@@ -32,16 +32,11 @@ public class Config implements YAML
 
     @Override
     public void load() {
-        File file = new File(plugin.getDataFolder() + getFileName());
+        File file = new File(plugin.getDataFolder() + "/" + getFileName());
 
         if(!file.exists()){
-            try{
-                file.getParentFile().mkdirs();
-                plugin.saveResource(getFileName(), false);
-                Files.move(new File(plugin.getDataFolder(), getFileName()), new File(plugin.getDataFolder() + getFileName()));
-            }catch (IOException ex){
-                ex.printStackTrace();
-            }
+            file.getParentFile().mkdir();
+            plugin.saveResource(getFileName(), false);
         }
 
         fileConfiguration = new YamlConfiguration();

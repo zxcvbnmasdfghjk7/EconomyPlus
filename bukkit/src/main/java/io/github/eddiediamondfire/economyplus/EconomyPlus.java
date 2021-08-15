@@ -1,5 +1,6 @@
 package io.github.eddiediamondfire.economyplus;
 
+import io.github.eddiediamondfire.economyplus.command.CommandManager;
 import io.github.eddiediamondfire.economyplus.config.FileManager;
 import io.github.eddiediamondfire.economyplus.events.ServerListeners;
 import io.github.eddiediamondfire.economyplus.player.MoneyManager;
@@ -41,7 +42,7 @@ public class EconomyPlus extends JavaPlugin {
     @Override
     public void onEnable() {
         getLogger().info("Loading Database");
-        connectionUrl = "jdbc:h2: " + getDataFolder().getAbsolutePath() + "/data/playereconomy";
+        connectionUrl = "jdbc:h2:" + getDataFolder().getAbsolutePath() + "/data/economy";
 
         getLogger().info("Loading File System");
         fileManager.onLoad();
@@ -52,20 +53,26 @@ public class EconomyPlus extends JavaPlugin {
             getLogger().info("Set the storage method to H2");
             database = new H2Database(this);
             databaseStorageMethod = new H2Database(this);
+
+            database.initialiseDatabase();
         }else if(configFile.getString("storage_settings.storage_method").equalsIgnoreCase("mysql")){
             getLogger().info("Set the storage method to MySQL");
         }else{
             getLogger().info("Incorrect storage method set, defaulting to use H2");
             database = new H2Database(this);
             databaseStorageMethod = new H2Database(this);
+
+            database.initialiseDatabase();
         }
 
         getLogger().info("Setting up Listeners");
         getServer().getPluginManager().registerEvents(new ServerListeners(this), this);
+        getCommand("economyplus").setExecutor(new CommandManager(this));
     }
 
     @Override
     public void onDisable(){
+        getLogger().info("Saving PlayerData");
         moneyManager.savePlayerBanks();
     }
 
