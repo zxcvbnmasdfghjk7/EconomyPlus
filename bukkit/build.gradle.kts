@@ -1,3 +1,5 @@
+import java.util.regex.Pattern.compile
+
 plugins{
     kotlin("jvm")
     id("net.minecrell.plugin-yml.bukkit")
@@ -19,10 +21,22 @@ dependencies{
 }
 
 bukkit{
+    name = "EconomyPlus"
     main = "io.github.eddiediamondfire.economyplus.EconomyPlus"
     apiVersion = "1.17"
     authors = listOf("EddieDiamondFire (ScxLore1216)")
     depend = listOf("Vault")
     defaultPermission = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
     load = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.PluginLoadOrder.STARTUP
+
+    commands{
+        register("economyplus"){
+            description = "Main plugin"
+            aliases = listOf("ep", "economy", "eco")
+        }
+    }
+
+    permissions{
+
+    }
 }
