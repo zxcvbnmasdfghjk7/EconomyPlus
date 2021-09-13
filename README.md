@@ -25,7 +25,7 @@ This repository is under development by EddieDiamondFire (Also known as ScxLore1
 ### Developer Guide
 
 The dependencies will be required is:
-* Lombok
+
 * Slf4j
 ### Setup Guide
 
