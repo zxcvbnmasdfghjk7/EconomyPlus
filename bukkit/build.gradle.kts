@@ -1,4 +1,4 @@
-import java.util.regex.Pattern.compile
+ import org.jetbrains.kotlin.psi2ir.generators.unwrapCallableDescriptorAndTypeArguments
 
 plugins{
     kotlin("jvm")
@@ -18,6 +18,8 @@ dependencies{
     val slf4jVersion: String = project.properties["slf4jVersion"] as String
     implementation("org.slf4j:slf4j-api:${slf4jVersion}")
     implementation("org.slf4j:slf4j-log4j12:${slf4jVersion}")
+
+    implementation(project(":api"))
 }
 
 bukkit{
@@ -37,6 +39,27 @@ bukkit{
     }
 
     permissions{
-
+        register("economyplus.*"){
+            children = listOf("economyplus.admin.*")
+        }
+        register("economyplus.admin.*"){
+            children = listOf("economyplus.admin.set", "economyplus.admin.add", "economyplus.admin.remove")
+            childrenMap = mapOf("economyplus.admin.set" to true)
+            childrenMap = mapOf("economyplus.admin.add" to true)
+            childrenMap = mapOf("economyplus.admin.remove" to true)
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("economyplus.admin.set"){
+            description = "Admin SubCommand for setting player's account"
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("economyplus.admin.add"){
+            description = "Admin SubCommand for adding amount into player's account"
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("economyplus.admin.remove"){
+            description = "Admin SubCommand for subtracting amount from player's account"
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
     }
 }
