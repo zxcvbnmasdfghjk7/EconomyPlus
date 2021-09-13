@@ -2,6 +2,7 @@ package io.github.eddiediamondfire.economyplus.config;
 
 import io.github.eddiediamondfire.economyplus.EconomyPlus;
 import io.github.eddiediamondfire.economyplus.config.file.Config;
+import io.github.eddiediamondfire.economyplus.config.file.PluginMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ public class FileManager {
         this.plugin = plugin;
         yamlFiles = new ArrayList<>();
         yamlFiles.add(new Config(this));
+        yamlFiles.add(new PluginMessage(this));
     }
 
     public void onLoad(){
