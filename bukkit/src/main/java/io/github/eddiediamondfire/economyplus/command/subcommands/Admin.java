@@ -8,6 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Admin implements SubCommand {
@@ -115,12 +117,34 @@ public class Admin implements SubCommand {
                     player.sendMessage(ChatColor.RED + "Usage: /economyplus admin remove <Player> <Amount>");
                 }
             }
+        }else if(args.length == 1){
+            player.sendMessage(ChatColor.YELLOW + "Help:");
+            player.sendMessage(ChatColor.YELLOW + "Key: Optional -> []");
+            player.sendMessage(ChatColor.YELLOW + "     Compulsory -> <>");
+            player.sendMessage(ChatColor.YELLOW + "/economy admin set <Player> <Amount>");
+            player.sendMessage(ChatColor.YELLOW + "/economy admin remove <Player> <Amount>");
+            player.sendMessage(ChatColor.YELLOW + "/economy admin add <Player> <Amount>");
         }
         return false;
     }
 
     @Override
     public List<String> onTabComplete(Player player, String[] args) {
+        if(args.length == 0){
+            List<String> onTab = new ArrayList<>();
+            onTab.add("set");
+            onTab.add("add");
+            onTab.add("remove");
+            return onTab;
+        }
+        if(args[1].equalsIgnoreCase("set")){
+            List<String> playersInServer = new ArrayList<>();
+
+            for(Player players: Bukkit.getOnlinePlayers()){
+                playersInServer.add(players.getName());
+            }
+            return playersInServer;
+        }
         return null;
     }
 }

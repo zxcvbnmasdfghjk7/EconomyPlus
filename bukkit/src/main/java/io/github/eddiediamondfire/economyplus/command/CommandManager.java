@@ -48,7 +48,7 @@ public class CommandManager implements TabExecutor {
                 return true;
             }
         }else{
-            sender.sendMessage(ChatColor.RED + "ERROR: Player command only!");
+            sender.sendMessage(ChatColor.RED + "ERROR: Player command only!!");
             return false;
         }
         return false;
@@ -65,6 +65,21 @@ public class CommandManager implements TabExecutor {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        if(args.length == 1){
+            List<String> argsInOnTab = new ArrayList<>();
+
+            for (SubCommand subCommand : subCommands) {
+                argsInOnTab.add(subCommand.getName());
+            }
+            return argsInOnTab;
+        }else if(args.length >= 2){
+            for(SubCommand subCommand: subCommands){
+                if(args[0].equalsIgnoreCase(subCommand.getName())){
+                    Player player = (Player) sender;
+                    return subCommand.onTabComplete(player, args);
+                }
+            }
+        }
         return null;
     }
 
