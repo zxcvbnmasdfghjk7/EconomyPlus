@@ -1,6 +1,7 @@
 package io.github.eddiediamondfire.economyplus.events;
 
 import io.github.eddiediamondfire.economyplus.EconomyPlus;
+import io.github.eddiediamondfire.economyplus.api.account.Account;
 import io.github.eddiediamondfire.economyplus.player.MoneyManager;
 import io.github.eddiediamondfire.economyplus.storage.StorageMethod;
 import org.bukkit.Server;
@@ -14,6 +15,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 
 public class ServerListeners implements Listener
