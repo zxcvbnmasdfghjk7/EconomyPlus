@@ -1,6 +1,6 @@
 # EconomyPlus
 
-A simple vault economy plugin.
+A simple vault economy plugin for Spigot. [More Features will be added soon!]
 
 **This repository is WIP**
 
@@ -11,6 +11,7 @@ A simple vault economy plugin.
 * Authors
 * Developer Guide
 * Setup Guide
+* Commands & Permissions
 
 ### FAQ
 
@@ -22,9 +23,16 @@ Please go to the troubleshooting guide for diagnosis.
 
 No! Well maybe if this gets upvoted. Probably I won't add 1.8 backend support because due to security and incompatibility issues with dependencies.
 
+> Can I request a feature?
+
+Absolutely! You can request a suggested feature with Github's issue template.
+
 ### Authors
 
-This repository is under development by EddieDiamondFire (Also known as ScxLore1216)
+Author of this repository is EddieDiamondFire (ScxLore1216).
+
+#### Contributors
+None. Coming Soon!
 
 ### Developer Guide
 
