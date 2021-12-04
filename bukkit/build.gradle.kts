@@ -14,11 +14,11 @@ dependencies{
     compileOnly("org.spigotmc:spigot-api:1.17-R0.1-SNAPSHOT")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
     implementation("com.h2database:h2:1.4.200")
+    implementation("org.python:jython:2.7.2")
 
     val slf4jVersion: String = project.properties["slf4jVersion"] as String
     implementation("org.slf4j:slf4j-api:${slf4jVersion}")
     implementation("org.slf4j:slf4j-log4j12:${slf4jVersion}")
-
     implementation(project(":api"))
 }
 

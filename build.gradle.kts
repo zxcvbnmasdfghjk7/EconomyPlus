@@ -12,7 +12,7 @@ allprojects{
     repositories{
         mavenCentral()
         flatDir {
-            dirs("libraries")
+            dirs("lib")
         }
     }
 }
@@ -25,6 +25,7 @@ apply(plugin="java")
 val kotlinVersion = project.properties["kotlinVersion"]
 dependencies{
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}")
+    implementation("org.python:jython:2.7.2")
     implementation(project(":bukkit"))
     implementation(project(":api"))
 }
