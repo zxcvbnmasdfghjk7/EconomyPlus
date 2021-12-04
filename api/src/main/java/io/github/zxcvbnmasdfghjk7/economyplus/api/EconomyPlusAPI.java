@@ -9,5 +9,9 @@ public interface EconomyPlusAPI {
 
     Account getAccount(UUID playerUUID);
     Account getAccount(String username);
+
+    Currency getCurrency(String currencyName);
+    Currency getDefaultCurrency();
+    boolean isCurrencyExist(String currencyName);
 }
 
