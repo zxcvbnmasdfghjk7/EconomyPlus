@@ -1,4 +1,4 @@
-package io.github.eddiediamondfire.economyplus.storage;
+package io.github.zxcvbnmasdfghjk7.economyplus.storage;
 
 import java.sql.Connection;
 

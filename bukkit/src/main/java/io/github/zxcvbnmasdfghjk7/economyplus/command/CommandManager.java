@@ -1,12 +1,10 @@
-package io.github.eddiediamondfire.economyplus.command;
+package io.github.zxcvbnmasdfghjk7.economyplus.command;
 
-import io.github.eddiediamondfire.economyplus.EconomyPlus;
-import io.github.eddiediamondfire.economyplus.command.subcommands.Admin;
-import io.github.eddiediamondfire.economyplus.command.subcommands.Balance;
-import io.github.eddiediamondfire.economyplus.vault.Economy;
+import io.github.zxcvbnmasdfghjk7.economyplus.EconomyPlus;
+import io.github.zxcvbnmasdfghjk7.economyplus.command.subcommands.Admin;
+import io.github.zxcvbnmasdfghjk7.economyplus.command.subcommands.Balance;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;

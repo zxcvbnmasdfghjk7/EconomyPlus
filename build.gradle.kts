@@ -6,7 +6,7 @@ plugins{
 }
 
 allprojects{
-    group = "io.github.eddiediamondfire"
+    group = "io.github.zxcvbnmasdfghjk7"
     version = "dev-SNAPSHOT"
 
     repositories{

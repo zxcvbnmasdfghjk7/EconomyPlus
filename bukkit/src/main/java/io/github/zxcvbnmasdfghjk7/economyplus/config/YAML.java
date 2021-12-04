@@ -1,4 +1,4 @@
-package io.github.eddiediamondfire.economyplus.config;
+package io.github.zxcvbnmasdfghjk7.economyplus.config;
 
 import org.bukkit.configuration.file.FileConfiguration;
 

@@ -1,10 +1,8 @@
-package io.github.eddiediamondfire.economyplus.events;
+package io.github.zxcvbnmasdfghjk7.economyplus.events;
 
-import io.github.eddiediamondfire.economyplus.EconomyPlus;
-import io.github.eddiediamondfire.economyplus.api.account.Account;
-import io.github.eddiediamondfire.economyplus.player.MoneyManager;
-import io.github.eddiediamondfire.economyplus.storage.StorageMethod;
-import org.bukkit.Server;
+import io.github.zxcvbnmasdfghjk7.economyplus.EconomyPlus;
+import io.github.zxcvbnmasdfghjk7.economyplus.player.MoneyManager;
+import io.github.zxcvbnmasdfghjk7.economyplus.storage.StorageMethod;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,10 +10,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.logging.Level;
 
 public class ServerListeners implements Listener
@@ -36,7 +32,10 @@ public class ServerListeners implements Listener
             plugin.getLogger().info("Player Account does not exist! \n Creating a new Account for this player " + player.getDisplayName());
 
             FileConfiguration config = plugin.getConfigFile();
-            storageMethod.createAccount(player.getUniqueId(), player.getName(), config.getDouble("global_economy.default_starting_amount"));
+            storageMethod.createAccount(player.getUniqueId(), player.getName(), plugin.getCurrencyManager().getCurrenciesAsList());
+
+
+
         }
         moneyManager.loadPlayerAccount(event.getPlayer().getUniqueId());
 
@@ -60,7 +59,7 @@ public class ServerListeners implements Listener
         MoneyManager moneyManager = plugin.getMoneyManager();
         storageMethod = plugin.getDatabaseStorageMethod();
 
-        io.github.eddiediamondfire.economyplus.player.Player playerAccount = moneyManager.getPlayerBank(player.getUniqueId());
+        io.github.zxcvbnmasdfghjk7.economyplus.player.Player playerAccount = moneyManager.getPlayerBank(player.getUniqueId());
 
         try{
             PreparedStatement statement = plugin.getDatabase().getConnection().prepareStatement("UPDATE PlayerEconomy SET BALANCE=? WHERE PLAYER_UUID=?");

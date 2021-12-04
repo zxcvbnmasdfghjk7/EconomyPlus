@@ -1,4 +1,4 @@
-package io.github.eddiediamondfire.economyplus.command;
+package io.github.zxcvbnmasdfghjk7.economyplus.command;
 
 import org.bukkit.entity.Player;
 

@@ -1,8 +1,8 @@
-package io.github.eddiediamondfire.economyplus.config;
+package io.github.zxcvbnmasdfghjk7.economyplus.config;
 
-import io.github.eddiediamondfire.economyplus.EconomyPlus;
-import io.github.eddiediamondfire.economyplus.config.file.Config;
-import io.github.eddiediamondfire.economyplus.config.file.PluginMessage;
+import io.github.zxcvbnmasdfghjk7.economyplus.EconomyPlus;
+import io.github.zxcvbnmasdfghjk7.economyplus.config.file.Config;
+import io.github.zxcvbnmasdfghjk7.economyplus.config.file.PluginMessage;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,24 +1,21 @@
-package io.github.eddiediamondfire.economyplus;
+package io.github.zxcvbnmasdfghjk7.economyplus;
 
-import io.github.eddiediamondfire.economyplus.api.EconomyPlusAPI;
-import io.github.eddiediamondfire.economyplus.api.EconomyPlusManager;
-import io.github.eddiediamondfire.economyplus.api.account.Account;
-import io.github.eddiediamondfire.economyplus.command.CommandManager;
-import io.github.eddiediamondfire.economyplus.config.FileManager;
-import io.github.eddiediamondfire.economyplus.events.ServerListeners;
-import io.github.eddiediamondfire.economyplus.player.MoneyManager;
-import io.github.eddiediamondfire.economyplus.player.Player;
-import io.github.eddiediamondfire.economyplus.storage.Storage;
-import io.github.eddiediamondfire.economyplus.storage.StorageMethod;
-import io.github.eddiediamondfire.economyplus.storage.database.H2Database;
+import io.github.zxcvbnmasdfghjk7.economyplus.api.EconomyPlusAPI;
+import io.github.zxcvbnmasdfghjk7.economyplus.api.implementation.EconomyAPIImplementation;
+import io.github.zxcvbnmasdfghjk7.economyplus.command.CommandManager;
+import io.github.zxcvbnmasdfghjk7.economyplus.config.FileManager;
+import io.github.zxcvbnmasdfghjk7.economyplus.currency.CurrencyManager;
+import io.github.zxcvbnmasdfghjk7.economyplus.events.ServerListeners;
+import io.github.zxcvbnmasdfghjk7.economyplus.player.MoneyManager;
+import io.github.zxcvbnmasdfghjk7.economyplus.storage.Storage;
+import io.github.zxcvbnmasdfghjk7.economyplus.storage.StorageMethod;
+import io.github.zxcvbnmasdfghjk7.economyplus.storage.database.H2Database;
+import io.github.zxcvbnmasdfghjk7.economyplus.utils.PythonExecution;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class EconomyPlus extends JavaPlugin {
 
@@ -27,16 +24,23 @@ public class EconomyPlus extends JavaPlugin {
     private final MoneyManager moneyManager;
     private Storage database = null;
     private FileConfiguration configFile;
-    private Economy economy = null;
+    private final Economy economy;
     private StorageMethod databaseStorageMethod = null;
+    private final CurrencyManager currencyManager;
+    private static EconomyPlus plugin = null;
+    private final PythonExecution python;
     private EconomyPlusAPI api = null;
 
-    private List<Account> accounts = null;
-
     public EconomyPlus(){
+        python = new PythonExecution(this);
         this.fileManager = new FileManager(this);
         moneyManager = new MoneyManager(this);
-        economy = new io.github.eddiediamondfire.economyplus.vault.Economy(this);
+        economy = new io.github.zxcvbnmasdfghjk7.economyplus.vault.Economy(this);
+        currencyManager = new CurrencyManager(this);
+    }
+
+    public static EconomyPlus getPlugin() {
+        return plugin;
     }
 
     @Override
@@ -52,6 +56,7 @@ public class EconomyPlus extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        plugin = this;
         getLogger().info("Loading Database");
         connectionUrl = "jdbc:h2:" + getDataFolder().getAbsolutePath() + "/data/economy";
 
@@ -76,13 +81,15 @@ public class EconomyPlus extends JavaPlugin {
             database.initialiseDatabase();
         }
 
+        getLogger().info("Loading Currencies");
+        currencyManager.loadCurrencies();
+
         getLogger().info("Setting up Listeners");
         getServer().getPluginManager().registerEvents(new ServerListeners(this), this);
         getCommand("economyplus").setExecutor(new CommandManager(this));
 
         getLogger().info("Setting up EconomyPlus's API");
-        api = new EconomyPlusManager(this);
-        accounts = new ArrayList<>();
+        api = new EconomyAPIImplementation(this);
     }
 
     @Override
@@ -111,11 +118,15 @@ public class EconomyPlus extends JavaPlugin {
         return databaseStorageMethod;
     }
 
-    public EconomyPlusAPI getApi() {
+    public CurrencyManager getCurrencyManager() {
+        return currencyManager;
+    }
+
+    public EconomyPlusAPI getApplicationProgrammingInterface() {
         return api;
     }
 
-    public List<Account> getAccounts() {
-        return accounts;
+    public PythonExecution getPython() {
+        return python;
     }
 }

@@ -1,9 +1,8 @@
-package io.github.eddiediamondfire.economyplus.config.file;
+package io.github.zxcvbnmasdfghjk7.economyplus.config.file;
 
-import com.google.common.io.Files;
-import io.github.eddiediamondfire.economyplus.EconomyPlus;
-import io.github.eddiediamondfire.economyplus.config.FileManager;
-import io.github.eddiediamondfire.economyplus.config.YAML;
+import io.github.zxcvbnmasdfghjk7.economyplus.EconomyPlus;
+import io.github.zxcvbnmasdfghjk7.economyplus.config.FileManager;
+import io.github.zxcvbnmasdfghjk7.economyplus.config.YAML;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -11,23 +10,22 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 
-public class Config implements YAML
-{
-    private final EconomyPlus plugin;
-    private FileConfiguration fileConfiguration = null;
+public class PluginMessage implements YAML {
 
-    public Config(FileManager fileManager){
+    private FileConfiguration config = null;
+    private final EconomyPlus plugin;
+
+    public PluginMessage(FileManager fileManager){
         this.plugin = fileManager.getPlugin();
     }
-
     @Override
     public FileConfiguration getBukkitConfig() {
-        return fileConfiguration;
+        return config;
     }
 
     @Override
     public String getFileName() {
-        return "config.yml";
+        return "plugin-message.yml";
     }
 
     @Override
@@ -39,10 +37,10 @@ public class Config implements YAML
             plugin.saveResource(getFileName(), false);
         }
 
-        fileConfiguration = new YamlConfiguration();
+        config = new YamlConfiguration();
 
         try{
-            fileConfiguration.load(file);
+            config.load(file);
         }catch (IOException | InvalidConfigurationException ex){
             ex.printStackTrace();
         }

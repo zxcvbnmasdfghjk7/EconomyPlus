@@ -1,4 +1,4 @@
-package io.github.eddiediamondfire.economyplus.exceptions;
+package io.github.zxcvbnmasdfghjk7.economyplus.exceptions;
 
 public class InvalidAmount extends Exception {
 

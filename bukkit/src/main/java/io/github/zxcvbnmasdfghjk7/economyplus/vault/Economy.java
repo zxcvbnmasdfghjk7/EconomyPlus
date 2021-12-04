@@ -1,10 +1,10 @@
-package io.github.eddiediamondfire.economyplus.vault;
+package io.github.zxcvbnmasdfghjk7.economyplus.vault;
 
-import io.github.eddiediamondfire.economyplus.EconomyPlus;
-import io.github.eddiediamondfire.economyplus.config.YAML;
-import io.github.eddiediamondfire.economyplus.player.MoneyManager;
-import io.github.eddiediamondfire.economyplus.player.Player;
-import io.github.eddiediamondfire.economyplus.storage.StorageMethod;
+import io.github.zxcvbnmasdfghjk7.economyplus.EconomyPlus;
+import io.github.zxcvbnmasdfghjk7.economyplus.config.YAML;
+import io.github.zxcvbnmasdfghjk7.economyplus.currency.Currency;
+import io.github.zxcvbnmasdfghjk7.economyplus.player.MoneyManager;
+import io.github.zxcvbnmasdfghjk7.economyplus.storage.StorageMethod;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -30,7 +30,7 @@ public class Economy implements net.milkbowl.vault.economy.Economy {
 
     @Override
     public String getName() {
-        return "EconomyPlus";
+        return plugin.getCurrencyManager().getDefaultCurrency().getName();
     }
 
     @Override
@@ -45,17 +45,17 @@ public class Economy implements net.milkbowl.vault.economy.Economy {
 
     @Override
     public String format(double amount) {
-        return config.getBukkitConfig().getString("global_economy.currency_symbol") + amount;
+        return String.valueOf(plugin.getCurrencyManager().getDefaultCurrency().getSymbol() + amount);
     }
 
     @Override
     public String currencyNamePlural() {
-        return config.getBukkitConfig().getString("global_economy.currency_plural");
+        return plugin.getCurrencyManager().getDefaultCurrency().getName();
     }
 
     @Override
     public String currencyNameSingular() {
-        return config.getBukkitConfig().getString("global_economy.currency_singular");
+        return plugin.getCurrencyManager().getDefaultCurrency().getName();
     }
 
     @Override
@@ -80,13 +80,15 @@ public class Economy implements net.milkbowl.vault.economy.Economy {
 
     @Override
     public double getBalance(String playerName) {
-        return storageSystem.getBalance(playerName);
+        Currency currency = plugin.getCurrencyManager().getDefaultCurrency();
+        return plugin.getMoneyManager().getBalance(playerName, currency);
     }
 
     @Override
     public double getBalance(OfflinePlayer player) {
+        Currency currency = plugin.getCurrencyManager().getDefaultCurrency();
         UUID playerUUID = player.getUniqueId();
-        return storageSystem.getBalance(playerUUID);
+        return storageSystem.getBalance(playerUUID, currency);
     }
 
     @Override
@@ -102,7 +104,8 @@ public class Economy implements net.milkbowl.vault.economy.Economy {
     @Override
     public boolean has(String playerName, double amount) {
         UUID playerUUID = Bukkit.getPlayer(playerName).getUniqueId();
-        double amountInBank = storageSystem.getBalance(playerUUID);
+
+        double amountInBank = storageSystem.getBalance(playerUUID, plugin.getCurrencyManager().getDefaultCurrency());
 
         return amount == amountInBank;
     }
@@ -110,7 +113,7 @@ public class Economy implements net.milkbowl.vault.economy.Economy {
     @Override
     public boolean has(OfflinePlayer player, double amount) {
         UUID playerUUID = player.getUniqueId();
-        double amountInBank = storageSystem.getBalance(playerUUID);
+        double amountInBank = storageSystem.getBalance(playerUUID, plugin.getCurrencyManager().getDefaultCurrency());
         return amount == amountInBank;
     }
 
@@ -127,7 +130,8 @@ public class Economy implements net.milkbowl.vault.economy.Economy {
     @Override
     public EconomyResponse withdrawPlayer(String playerName, double amount) {
         double oldAmount, newAmount;
-        oldAmount = storageSystem.getBalance(playerName);
+        Currency currency = plugin.getCurrencyManager().getDefaultCurrency();
+        oldAmount = storageSystem.getBalance(playerName, currency);
 
         if(oldAmount < amount){
             return new EconomyResponse(amount, oldAmount, EconomyResponse.ResponseType.FAILURE, "Your withdraw amount is greater than how much you currently have in the Bank!");
@@ -135,14 +139,15 @@ public class Economy implements net.milkbowl.vault.economy.Economy {
 
         newAmount = oldAmount - amount;
         MoneyManager moneyManager = plugin.getMoneyManager();
-        moneyManager.update(playerName, amount);
+        moneyManager.update(playerName, amount, currency);
         return new EconomyResponse(amount, newAmount, EconomyResponse.ResponseType.SUCCESS, "");
     }
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer player, double amount) {
         double oldAmount, newAmount;
-        oldAmount = storageSystem.getBalance(player.getUniqueId());
+        Currency currency = plugin.getCurrencyManager().getDefaultCurrency();
+        oldAmount = storageSystem.getBalance(player.getUniqueId(), currency);
 
         if(oldAmount < amount){
             return new EconomyResponse(amount, oldAmount, EconomyResponse.ResponseType.FAILURE, "Your withdraw amount is greater than how much you currently have in the Bank!");
@@ -151,7 +156,7 @@ public class Economy implements net.milkbowl.vault.economy.Economy {
         newAmount = oldAmount - amount;
 
         MoneyManager moneyManager = plugin.getMoneyManager();
-        moneyManager.update(player.getUniqueId(), amount);
+        moneyManager.update(player.getUniqueId(), amount, currency);
         return new EconomyResponse(amount, newAmount, EconomyResponse.ResponseType.SUCCESS, "");
     }
 
@@ -168,23 +173,25 @@ public class Economy implements net.milkbowl.vault.economy.Economy {
     @Override
     public EconomyResponse depositPlayer(String playerName, double amount) {
         double oldAmount, newAmount;
-        oldAmount = storageSystem.getBalance(playerName);
+        Currency currency = plugin.getCurrencyManager().getDefaultCurrency();
+        oldAmount = storageSystem.getBalance(playerName, currency);
 
         newAmount = oldAmount + amount;
         MoneyManager moneyManager = plugin.getMoneyManager();
-        moneyManager.update(playerName, amount);
+        moneyManager.update(playerName, amount, currency);
         return new EconomyResponse(amount, newAmount, EconomyResponse.ResponseType.SUCCESS, "");
     }
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer player, double amount) {
         UUID playerUUID = player.getUniqueId();
+        Currency currency = plugin.getCurrencyManager().getDefaultCurrency();
         double oldAmount, newAmount;
-        oldAmount = storageSystem.getBalance(playerUUID);
+        oldAmount = storageSystem.getBalance(playerUUID, currency);
 
         newAmount = oldAmount + amount;
         MoneyManager moneyManager = plugin.getMoneyManager();
-        moneyManager.update(player.getUniqueId(), amount);
+        moneyManager.update(player.getUniqueId(), amount, currency);
         return new EconomyResponse(amount, newAmount, EconomyResponse.ResponseType.SUCCESS, "");
     }
 
@@ -262,14 +269,7 @@ public class Economy implements net.milkbowl.vault.economy.Economy {
     public boolean createPlayerAccount(String playerName) {
         UUID playerUUID = Bukkit.getPlayer(playerName).getUniqueId();
 
-        storageSystem.createAccount(playerUUID, playerName, 0);
-
-        MoneyManager moneyManager = plugin.getMoneyManager();
-
-        Player player = new Player(playerUUID, playerName);
-        player.getBank().put("Dollar", plugin.getConfigFile().getDouble("global_economy.default_starting_amount"));
-
-        moneyManager.getPlayersBank().put(playerUUID, player);
+        plugin.getMoneyManager().createAccount(playerUUID, playerName);
         return true;
     }
 
