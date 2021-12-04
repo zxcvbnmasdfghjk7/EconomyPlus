@@ -5,6 +5,8 @@ global_economy:
   currency_symbol: $
   default_starting_amount: 100
 
+new_currency_config:
+  default_starting_balance: 100
 storage_settings:
   # Options are h2, mysql
   storage_method: h2

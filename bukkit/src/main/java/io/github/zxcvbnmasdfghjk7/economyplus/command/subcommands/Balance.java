@@ -32,6 +32,8 @@ public class Balance implements SubCommand {
     @Override
     public boolean action(Player player, String[] args) {
         if(args.length > 1){
+            String playerName = args[1];
+            io.github.zxcvbnmasdfghjk7.economyplus.player.Player playerAccount = plugin.getMoneyManager().getPlayer(player.getName());
 
         }
         return true;
